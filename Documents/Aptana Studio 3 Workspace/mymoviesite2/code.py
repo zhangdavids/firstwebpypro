@@ -24,7 +24,20 @@ class index:
 #             page += '%s(%d)\n'%(m['title'],m['year']) 
 #         return page
         movies = db.select('movie')
-        return render.index(movies)
+#         return render.index(movies)
+        count = db.query('SELECT COUNT(*) AS COUNT FROM movie')[0]['COUNT']
+        return render.index(movies, count, None)
+    
+    def POST(self):
+        data = web.input()
+        condition = r'title like "%' + data.title + r'%"'
+        movies = db.select('movie',where=condition)
+#         return render.index(movies)
+        count = db.query('SELECT COUNT(*) AS COUNT FROM movie WHERE ' + condition)[0]['COUNT']
+        return render.index(movies, count, data.title)
+     
+        
+    
         
         
 
